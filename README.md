@@ -1,4 +1,4 @@
-# tartanhacks-2025
+# NavSphere
 
 **Passenger Princess**
 
