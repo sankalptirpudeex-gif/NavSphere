@@ -1,0 +1,5 @@
+fastapi
+fastapi-cli
+openai
+requests
+SpeechRecognition
