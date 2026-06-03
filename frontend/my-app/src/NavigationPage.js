@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { GoogleMap, LoadScript, DirectionsRenderer, Autocomplete, Marker } from "@react-google-maps/api";
 
 const GOOGLE_KEY = process.env.REACT_APP_GOOGLE_KEY;
+const BACKEND_HTTP = "https://navsphere.onrender.com";
+const BACKEND_WS   = "wss://navsphere.onrender.com";
 const LIBRARIES = ["places"];
 const mapContainerStyle = { width: "100vw", height: "100vh" };
 const mapStyles = [
@@ -59,7 +61,7 @@ const NavigationPage = () => {
 
   // Nav websocket + GPS polling
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8000/navigation");
+    const ws = new WebSocket(`${BACKEND_WS}/navigation`);
     navsocketRef.current = ws;
     ws.onopen = () => console.log("NavSocket open");
     ws.onmessage = (event) => speak(event.data, null);
@@ -79,7 +81,7 @@ const NavigationPage = () => {
   }, []);
 
   const setupAudioCapture = () => {
-    const ws = new WebSocket("ws://localhost:8000/ws");
+    const ws = new WebSocket(`${BACKEND_WS}/ws`);
     socketRef.current = ws;
     let waiting = false;
 
@@ -142,7 +144,7 @@ const NavigationPage = () => {
         setDirections(result);
         const leg = result.routes[0].legs[0];
         try {
-          await fetch("http://localhost:8000/destination", {
+          await fetch(`${BACKEND_HTTP}/destination`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
